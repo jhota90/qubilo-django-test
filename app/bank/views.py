@@ -8,15 +8,15 @@ from .serializers import (
 
 
 class CardViewSet(viewsets.ModelViewSet):
-    queryset = Card.objects.all()
+    queryset = Card.objects.order_by('-card_number')
     serializer_class = CardSerializer
 
 
 class CreditAccountViewSet(viewsets.ModelViewSet):
-    queryset = CreditAccount.objects.all()
+    queryset = CreditAccount.objects.order_by('-account_number')
     serializer_class = CreditAccountSerializer
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
-    queryset = Transaction.objects.all()
+    queryset = Transaction.objects.order_by('-transaction_date')
     serializer_class = TransactionSerializer

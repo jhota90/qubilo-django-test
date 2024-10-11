@@ -25,9 +25,6 @@ class CreditAccount(models.Model):
         blank=True,
     )
 
-    def __str__(self):
-        return str(self.account_number)
-
 
 class Card(models.Model):
     card_number = models.CharField(
@@ -48,9 +45,6 @@ class Card(models.Model):
         null=False,
         blank=False
     )
-
-    def __str__(self):
-        return str(self.card_number)
 
 
 class Transaction(models.Model):
@@ -78,6 +72,3 @@ class Transaction(models.Model):
         null=False,
         blank=False
     )
-
-    def __str__(self):
-        return str(self.transaction_id)
