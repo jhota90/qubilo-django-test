@@ -17,5 +17,8 @@ restart:
 	docker-compose down
 	docker-compose up
 
-test:
-	docker exec qubilo_test_app python manage.py test --settings=core.settings.testing 
+django_test:
+	docker exec qubilo_test_app python manage.py test
+
+pytest:
+	docker exec qubilo_test_app pytest

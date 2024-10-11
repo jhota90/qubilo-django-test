@@ -4,5 +4,6 @@ migrations/
 *.pyc
 *.pyo
 *.sqlite3
+.pytest_cache/
 
 qubilo_test_env/
