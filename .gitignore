@@ -1,6 +1,5 @@
 .idea/
 __pycache__/
-migrations/
 *.pyc
 *.pyo
 *.sqlite3

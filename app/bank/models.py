@@ -8,7 +8,8 @@ class CreditAccount(models.Model):
         max_length=20,
         null=False,
         blank=False,
-        unique=True
+        unique=True,
+        db_index=True
     )
     balance = models.DecimalField(
         verbose_name="Balance",
@@ -31,7 +32,8 @@ class Card(models.Model):
         verbose_name="Card number",
         max_length=50,
         null=False,
-        blank=True
+        blank=True,
+        db_index=True
     )
     expiration_date = models.DateField(
         verbose_name="Expiration date",
@@ -63,7 +65,8 @@ class Transaction(models.Model):
     transaction_date = models.DateField(
         verbose_name="Transaction date",
         null=False,
-        blank=False
+        blank=False,
+        db_index=True
     )
     card = models.ForeignKey(
         to=Card,
