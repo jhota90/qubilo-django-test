@@ -38,25 +38,25 @@ class TransactionAPITest(APITestCase):
     def test_get_transaction(self):
         transaction = Transaction.objects.create(**self.transaction_data)
         response = self.client.get(
-            f"{self.transaction_url}{transaction.transaction_id}/"
+            f"{self.transaction_url}{transaction.id}/"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            response.data["transaction_id"], str(transaction.transaction_id)
+            response.data["id"], str(transaction.id)
         )
 
     def test_update_transaction(self):
         transaction = Transaction.objects.create(**self.transaction_data)
         update_data = {"transaction_date": "2025-01-01"}
         response = self.client.patch(
-            f"{self.transaction_url}{transaction.transaction_id}/",
+            f"{self.transaction_url}{transaction.id}/",
             update_data,
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             Transaction.objects.get(
-                transaction_id=transaction.transaction_id
+                id=transaction.id
             ).transaction_date.strftime("%Y-%m-%d"),
             "2025-01-01",
         )
@@ -70,7 +70,7 @@ class TransactionAPITest(APITestCase):
     def test_delete_credit_account(self):
         transaction = Transaction.objects.create(**self.transaction_data)
         response = self.client.delete(
-            f"{self.transaction_url}{transaction.transaction_id}/"
+            f"{self.transaction_url}{transaction.id}/"
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Transaction.objects.count(), 0)

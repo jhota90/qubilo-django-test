@@ -8,8 +8,7 @@ class CreditAccount(models.Model):
         max_length=20,
         null=False,
         blank=False,
-        unique=True,
-        db_index=True
+        unique=True
     )
     balance = models.DecimalField(
         verbose_name="Balance",
@@ -33,7 +32,7 @@ class Card(models.Model):
         max_length=50,
         null=False,
         blank=True,
-        db_index=True
+        unique=True
     )
     expiration_date = models.DateField(
         verbose_name="Expiration date",
@@ -50,7 +49,7 @@ class Card(models.Model):
 
 
 class Transaction(models.Model):
-    transaction_id = models.UUIDField(
+    id = models.UUIDField(
         primary_key=True,
         verbose_name="Transaction ID",
         default=uuid4

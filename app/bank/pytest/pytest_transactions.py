@@ -51,24 +51,24 @@ class TestCard:
         self.transaction_data["card_id"] = card.id
         transaction = Transaction.objects.create(**self.transaction_data)
         response = api_client.get(
-            f"{self.transaction_url}{transaction.transaction_id}/"
+            f"{self.transaction_url}{transaction.id}/"
         )
         assert response.status_code == status.HTTP_200_OK
-        assert response.data["transaction_id"] == str(transaction.transaction_id)
+        assert response.data["id"] == str(transaction.id)
 
     def test_update_transaction(self, api_client, card):
         self.transaction_data["card_id"] = card.id
         transaction = Transaction.objects.create(**self.transaction_data)
         update_data = {"transaction_date": "2025-01-01"}
         response = api_client.patch(
-            f"{self.transaction_url}{transaction.transaction_id}/",
+            f"{self.transaction_url}{transaction.id}/",
             update_data,
             format="json",
         )
         assert response.status_code == status.HTTP_200_OK
         assert (
             Transaction.objects.get(
-                transaction_id=transaction.transaction_id
+                id=transaction.id
             ).transaction_date.strftime("%Y-%m-%d")
             == "2025-01-01"
         )
@@ -84,7 +84,7 @@ class TestCard:
         self.transaction_data["card_id"] = card.id
         transaction = Transaction.objects.create(**self.transaction_data)
         response = api_client.delete(
-            f"{self.transaction_url}{transaction.transaction_id}/"
+            f"{self.transaction_url}{transaction.id}/"
         )
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert Transaction.objects.count() == 0
