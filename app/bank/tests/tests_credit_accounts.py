@@ -35,6 +35,12 @@ class CreditAccountTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(CreditAccount.objects.get(id=account.id).balance, 200.00)
 
+    def test_retrieve_credit_account(self):
+        CreditAccount.objects.create(**self.account_data)
+        response = self.client.get(self.credit_accounts_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data.get("results")), 1)
+
     def test_delete_credit_account(self):
         account = CreditAccount.objects.create(**self.account_data)
         response = self.client.delete(f"{self.credit_accounts_url}{account.id}/")

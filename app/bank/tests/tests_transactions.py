@@ -18,20 +18,59 @@ class TransactionAPITest(APITestCase):
             expiration_date=date(2025, 12, 31),
             credit_account=self.credit_account,
         )
-        self.transaction = Transaction.objects.create(
-            amount=Decimal("100.00"), transaction_date=date.today(), card=self.card
-        )
-
-    def test_create_transaction(self):
-        data = {
+        self.transaction_json_data = {
             "amount": "200.00",
             "transaction_date": str(date.today()),
             "card": self.card.id,
         }
-        response = self.client.post(self.transaction_url, data, format="json")
+        self.transaction_data = {
+            "amount": "200.00",
+            "transaction_date": str(date.today()),
+            "card_id": self.card.id,
+        }
+
+    def test_create_transaction(self):
+        response = self.client.post(
+            self.transaction_url, self.transaction_json_data, format="json"
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_get_transaction(self):
+        transaction = Transaction.objects.create(**self.transaction_data)
+        response = self.client.get(
+            f"{self.transaction_url}{transaction.transaction_id}/"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.data["transaction_id"], str(transaction.transaction_id)
+        )
+
+    def test_update_transaction(self):
+        transaction = Transaction.objects.create(**self.transaction_data)
+        update_data = {"transaction_date": "2025-01-01"}
+        response = self.client.patch(
+            f"{self.transaction_url}{transaction.transaction_id}/",
+            update_data,
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            Transaction.objects.get(
+                transaction_id=transaction.transaction_id
+            ).transaction_date.strftime("%Y-%m-%d"),
+            "2025-01-01",
+        )
+
     def test_retrieve_transactions(self):
+        Transaction.objects.create(**self.transaction_data)
         response = self.client.get(self.transaction_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data.get("results")), 1)
+
+    def test_delete_credit_account(self):
+        transaction = Transaction.objects.create(**self.transaction_data)
+        response = self.client.delete(
+            f"{self.transaction_url}{transaction.transaction_id}/"
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Transaction.objects.count(), 0)
